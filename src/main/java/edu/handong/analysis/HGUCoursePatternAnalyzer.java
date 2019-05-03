@@ -19,8 +19,8 @@ public class HGUCoursePatternAnalyzer {
 						"2019-1, SJ Kim, Algorithm Analysis",
 						};
 
-	int numOfStudents;
-	int numOfCourses;
+	int numOfStudents=0;
+	int numOfCourses=0;
 	Student[] students;
 	Course[] courses;
 	
@@ -41,11 +41,11 @@ public class HGUCoursePatternAnalyzer {
 		}
 		
 		courses = initiateCourseArrayFromLines(lines);
+		
 		System.out.println("Number of All Courses: " + numOfCourses);
 		for(Course course: courses) {
 			System.out.println(course.getCourseName());
 		}
-		
 	}
 
 	/**
@@ -54,11 +54,30 @@ public class HGUCoursePatternAnalyzer {
 	 * @return
 	 */
 	private Student[] initiateStudentArrayFromLines(String[] lines) {
-		
-		// TODO: implement this method
-		
-		
-		return null;
+		//임시로 받을 스트링 값 tempString
+		String tempString[];
+		tempString = new String[3];
+		//임시로 저장할 tempStudent
+		Student tempStudent;
+		//return해주기 위한 임시 temp
+		Student[] temp;
+		temp = new Student[numOfStudents];
+		for(int i=0;i<numOfStudents;i++)
+			temp[i] = new Student("");
+			
+		//어레이안에 index를 위한 변수 i
+		int i=0;
+		for(String line : lines) {
+			tempString = line.split(",");
+			tempStudent = new Student(tempString[1].trim());
+			if(studentExist(temp, tempStudent) == false) {
+				temp[i] = tempStudent;
+				i++;
+				if(i == numOfStudents)
+					break;
+			}
+		}
+		return temp;
 	}
 
 	/**
@@ -68,10 +87,18 @@ public class HGUCoursePatternAnalyzer {
 	 * @return boolean
 	 */
 	private boolean studentExist(Student[] students, Student student) {
-		
-		// TODO: implement this method
+		//students array안에 아무것도 없을때
+	      if(students[0] == null) 
+	         return false;
 
-		return false;
+	      for(Student exitStudent : students) {
+	         if(exitStudent == null)
+	            return true;
+	         
+	         if(exitStudent.getName().equals(student.getName()))
+	            return true;
+	      }
+	      return false;
 	}
 	
 	/**
@@ -80,10 +107,29 @@ public class HGUCoursePatternAnalyzer {
 	 * @return
 	 */
 	private Course[] initiateCourseArrayFromLines(String[] lines) {
-		
-		// TODO: implement this method
-		
-		return null;
+		String tempString[];
+		tempString = new String[3];
+		//임시로 저장할 tempStudent
+		Course tempCourse;
+		//return해주기 위한 임시 temp
+		Course[] temp;
+		temp = new Course[numOfCourses];
+		for(int i=0;i<numOfCourses;i++)
+			temp[i] = new Course("");
+			
+		//어레이안에 index를 위한 변수 i
+		int i=0;
+		for(String line : lines) {
+			tempString = line.split(",");
+			tempCourse = new Course(tempString[2].trim());
+			if(courseExist(temp, tempCourse) == false) {
+				temp[i] = tempCourse;
+				i++;
+				if(i == numOfCourses)
+					break;
+			}
+		}
+		return temp;
 	}
 
 	/**
@@ -93,10 +139,17 @@ public class HGUCoursePatternAnalyzer {
 	 * @return boolean
 	 */
 	private boolean courseExist(Course[] courses, Course course) {
-		
-		// TODO: implement this method
+		//students array안에 아무것도 없을때
+	      if(courses[0] == null) 
+	         return false;
 
-		return false;
+	      for(Course exitCourse : courses) {
+	         if(exitCourse == null)
+	            return true;
+	         
+	         if(exitCourse.getCourseName().equals(course.getCourseName()))
+	            return true;
+	      }
+	      return false;
 	}
-
 }
