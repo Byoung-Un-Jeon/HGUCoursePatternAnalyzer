@@ -1,5 +1,5 @@
 package edu.handong.analysis;
-
+import java.util.ArrayList;
 import edu.handong.analysis.datamodel.Course;
 import edu.handong.analysis.datamodel.Student;
 
@@ -19,10 +19,10 @@ public class HGUCoursePatternAnalyzer {
 						"2019-1, SJ Kim, Algorithm Analysis",
 						};
 
-	private int numOfStudents=0;
-	private int numOfCourses=0;
-	private Student[] students;
-	private Course[] courses;
+	private int numOfStudents;
+	private int numOfCourses;
+	private ArrayList<Student> students;
+	private ArrayList<Course> courses;
 	
 	/**
 	 * This method runs our analysis logic to get the list of student and course names from lines.
@@ -34,18 +34,17 @@ public class HGUCoursePatternAnalyzer {
 		numOfCourses = Integer.parseInt(args[1]);
 	
 		students = initiateStudentArrayFromLines(lines);
-		
 		System.out.println("Number of All Students: " + numOfStudents);
 		for(Student student: students) {
 			System.out.println(student.getName());
 		}
 		
 		courses = initiateCourseArrayFromLines(lines);
-		
 		System.out.println("Number of All Courses: " + numOfCourses);
 		for(Course course: courses) {
 			System.out.println(course.getCourseName());
 		}
+		
 	}
 
 	/**
@@ -53,31 +52,18 @@ public class HGUCoursePatternAnalyzer {
 	 * @param lines
 	 * @return
 	 */
-	private Student[] initiateStudentArrayFromLines(String[] lines) {
-		//임시로 받을 스트링 값 tempString
-		String tempString[];
-		tempString = new String[3];
-		//임시로 저장할 tempStudent
-		Student tempStudent;
-		//return해주기 위한 임시 temp
-		Student[] temp;
-		temp = new Student[numOfStudents];
-		for(int i=0;i<numOfStudents;i++)
-			temp[i] = new Student("");
-			
-		//어레이안에 index를 위한 변수 i
-		int i=0;
-		for(String line : lines) {
-			tempString = line.split(",");
-			tempStudent = new Student(tempString[1].trim());
-			if(studentExist(temp, tempStudent) == false) {
-				temp[i] = tempStudent;
-				i++;
-				if(i == numOfStudents)
-					break;
-			}
+	private ArrayList<Student> initiateStudentArrayFromLines(String[] lines) {
+		
+		ArrayList<Student> students = new ArrayList<Student>(numOfStudents);
+		
+		for(String line:lines) {
+			String studentName = line.split(",")[1].trim();
+			Student newStudent = new Student(studentName);
+			if(!studentExist(students,newStudent))
+				students.add(newStudent);
 		}
-		return temp;
+		
+		return students;
 	}
 
 	/**
@@ -86,19 +72,14 @@ public class HGUCoursePatternAnalyzer {
 	 * @param student
 	 * @return boolean
 	 */
-	private boolean studentExist(Student[] students, Student student) {
-		//students array안에 아무것도 없을때
-	      if(students[0] == null) 
-	         return false;
+	private boolean studentExist(ArrayList<Student> students, Student student) {
+		
+		for(Student aStudent : students) {
+			if(aStudent != null && aStudent.getName().equals(student.getName()))
+				return true;
+		}
 
-	      for(Student exitStudent : students) {
-	         if(exitStudent == null)
-	            return true;
-	         
-	         if(exitStudent.getName().equals(student.getName()))
-	            return true;
-	      }
-	      return false;
+		return false;
 	}
 	
 	/**
@@ -106,30 +87,18 @@ public class HGUCoursePatternAnalyzer {
 	 * @param lines
 	 * @return
 	 */
-	private Course[] initiateCourseArrayFromLines(String[] lines) {
-		String tempString[];
-		tempString = new String[3];
-		//임시로 저장할 tempStudent
-		Course tempCourse;
-		//return해주기 위한 임시 temp
-		Course[] temp;
-		temp = new Course[numOfCourses];
-		for(int i=0;i<numOfCourses;i++)
-			temp[i] = new Course("");
-			
-		//어레이안에 index를 위한 변수 i
-		int i=0;
-		for(String line : lines) {
-			tempString = line.split(",");
-			tempCourse = new Course(tempString[2].trim());
-			if(courseExist(temp, tempCourse) == false) {
-				temp[i] = tempCourse;
-				i++;
-				if(i == numOfCourses)
-					break;
-			}
+	private ArrayList<Course> initiateCourseArrayFromLines(String[] lines) {
+		
+		 ArrayList<Course> courses = new  ArrayList<Course>(numOfCourses);
+		
+		for(String line:lines) {
+			String courseName = line.split(",")[2].trim();
+			Course newCourse = new Course(courseName);
+			if(!courseExist(courses,newCourse))
+				courses.add(newCourse);
 		}
-		return temp;
+		
+		return courses;
 	}
 
 	/**
@@ -138,18 +107,13 @@ public class HGUCoursePatternAnalyzer {
 	 * @param course
 	 * @return boolean
 	 */
-	private boolean courseExist(Course[] courses, Course course) {
-		//students array안에 아무것도 없을때
-	      if(courses[0] == null) 
-	         return false;
+	private boolean courseExist(ArrayList<Course> courses, Course course) {
+		
+		for(Course aCourse:courses) {
+			if(aCourse != null && aCourse.getCourseName().equals(course.getCourseName()))
+				return true;
+		}
 
-	      for(Course exitCourse : courses) {
-	         if(exitCourse == null)
-	            return true;
-	         
-	         if(exitCourse.getCourseName().equals(course.getCourseName()))
-	            return true;
-	      }
-	      return false;
+		return false;
 	}
 }
